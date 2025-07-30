@@ -3,11 +3,11 @@ import pandas as pd
 def clean_text(text):
     if pd.isna(text):
         return ""
-    return str(text).encode("ascii", "ignore").decode("utf-8").strip()
+    return str(text).strip()  # Only trim whitespace, keep accents
 
 # Load Goodreads export
 input_path = "files/goodreads_library_export.csv"
-df = pd.read_csv(input_path)
+df = pd.read_csv(input_path, encoding="utf-8")
 
 # Filter only 'to-read' shelf
 to_read_df = df[df['Exclusive Shelf'] == 'to-read'].copy()
@@ -31,8 +31,8 @@ to_read_df = to_read_df.reset_index(drop=True)
 # Add placeholder columns for enrichment
 to_read_df['Available Formats'] = ''
 
-# Save cleaned CSV
+# Save cleaned CSV with UTF-8 encoding
 output_path = "files/cleaned_to_read_list.csv"
-to_read_df.to_csv(output_path, index=False)
+to_read_df.to_csv(output_path, index=False, encoding="utf-8")
 
-print(f"Cleaned file saved to: {output_path}")
+print(f"✅ Cleaned file saved to: {output_path}")
